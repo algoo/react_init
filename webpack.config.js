@@ -29,6 +29,8 @@ module.exports = {
     ]
   },
   output: {
+    // libraryTarget: 'var',
+    // library: appName,
     path: path.resolve(__dirname, 'dist'),
     filename: `${appName}.app.entry.js`,
     pathinfo: !isProduction
