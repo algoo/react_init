@@ -1,0 +1,10 @@
+{
+  "login": true,
+  "user_logged": {
+    "id": 5,
+    "username": "JD",
+    "firstname": "John",
+    "lastname": "Doe",
+    "email": "jd@random.com"
+  }
+}

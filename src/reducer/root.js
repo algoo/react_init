@@ -1,8 +1,6 @@
 import { combineReducers } from 'redux'
-import isFetching from './isFetching.js'
+import user from './user.js'
 
-const rootReducer = combineReducers({
-  isFetching
-})
+const rootReducer = combineReducers({ user })
 
 export default rootReducer

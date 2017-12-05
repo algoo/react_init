@@ -1,24 +1,22 @@
 const webpack = require('webpack')
 const path = require('path')
 const isProduction = process.env.NODE_ENV === 'production'
-const appName = 'temp_name'
 
 module.exports = {
   entry: {
-    app: ['babel-polyfill', 'whatwg-fetch', './src/index.jsx'],
+    app: ['babel-polyfill', 'whatwg-fetch', './src/index.js'],
     vendor: [
       'babel-plugin-transform-class-properties',
       'babel-plugin-transform-object-assign',
       'babel-plugin-transform-object-rest-spread',
       'babel-polyfill',
       // 'lodash.pull',
-      'lodash.reject',
+      // 'lodash.reject',
       // 'lodash.uniqby',
       'react',
       'react-dom',
       'react-redux',
-      // 'react-router',
-      // 'react-router-dom',
+      'react-router-dom',
       // 'react-select',
       'redux',
       'redux-logger',
@@ -29,26 +27,25 @@ module.exports = {
     ]
   },
   output: {
-    // libraryTarget: 'var',
-    // library: appName,
     path: path.resolve(__dirname, 'dist'),
-    filename: `${appName}.app.entry.js`,
+    filename: 'app_name.app.entry.js',
     pathinfo: !isProduction
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist/'),
-    port: 8082,
+    port: 8090,
     hot: true,
     noInfo: true,
     overlay: {
       warnings: false,
       errors: true
-    }
+    },
+    historyApiFallback: true
     // headers: {
     //   'Access-Control-Allow-Origin': '*'
     // }
   },
-  devtool: 'eval-source-map',
+  devtool: isProduction ? false : 'cheap-module-source-map',
   module: {
     rules: [{
       test: /\.jsx?$/,
@@ -59,27 +56,36 @@ module.exports = {
       test: [/\.js$/, /\.jsx$/],
       loader: 'babel-loader',
       options: {
-        presets: ['react', 'es2015'],
+        presets: ['env', 'react'],
         plugins: ['transform-object-rest-spread', 'transform-class-properties', 'transform-object-assign']
-      }
+      },
+      exclude: [/node_modules/]
     }, {
       test: /\.css$/,
       use: ['style-loader', 'css-loader']
     }, {
       test: /\.styl$/,
       use: ['style-loader', 'css-loader', 'stylus-loader']
+    }, {
+      test: /\.(jpg|png|svg)$/,
+      loader: 'url-loader',
+      options: {
+        limit: 25000
+      }
     }]
   },
   resolve: {
     extensions: ['.js', '.jsx']
   },
-  plugins: [
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      filename: `${appName}.vendor.bundle.js`
-    }),
+  plugins:[
+    ...[ // generic plugins always present
+      new webpack.optimize.CommonsChunkPlugin({
+        name: 'vendor',
+        filename: 'app_name.vendor.bundle.js'
+      })
+    ],
     ...(isProduction
-      ? [
+      ? [ // production specific plugins
         new webpack.DefinePlugin({
           'process.env': { 'NODE_ENV': JSON.stringify('production') }
         }),
@@ -87,7 +93,7 @@ module.exports = {
           compress: { warnings: false }
         })
       ]
-      : []
+      : [] // development specific plugins
     )
   ]
 }

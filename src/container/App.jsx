@@ -1,21 +1,24 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Loader from '../component/Loader.jsx'
+import {
+  // Route,
+  withRouter
+} from 'react-router-dom'
+// import PrivateRoute from './PrivateRoute.jsx'
 
-export class App extends React.Component {
+class Tracim extends React.Component {
   render () {
-    const { isFetching } = this.props
-
     return (
       <div>
-        <Loader isFetching={isFetching} />
-        <div className='container'>
-          React Init
-        </div>
+        {/*
+        <PrivateRoute exact path='/' component={Home} />
+        <Route path='/login' component={Login} />
+        <PrivateRoute path='/page' component={Page} />
+        */}
       </div>
     )
   }
 }
 
-const mapStateToProps = ({ isFetching }) => ({ isFetching })
-export default connect(mapStateToProps)(App)
+const mapStateToProps = ({ user }) => ({ user })
+export default withRouter(connect(mapStateToProps)(Tracim))
